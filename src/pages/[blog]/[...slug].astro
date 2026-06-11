@@ -37,7 +37,9 @@ export const getStaticPaths = (async () => {
                     data: {
                         ...author.data,
                         position:
-                            author.data.position?.[code] ?? author.data.position?.en ?? "",
+                            author.data.position?.[code as "en" | "sl"] ??
+                            author.data.position?.en ??
+                            "",
                     },
                 };
 
@@ -64,7 +66,6 @@ const { Content } = await render(post);
     title={post?.data?.title}
     meta={{
         description: post?.data?.description,
-        keywords: post?.data?.keywords,
         image: post?.data?.image?.src,
     }}
 >
@@ -77,7 +78,7 @@ const { Content } = await render(post);
             <!--Main Article Image-->
             <Image
                 src={post?.data?.image}
-                alt={post?.data?.imageAlt}
+                alt={post.data.imageAlt || post.data.title}
                 class="mb-10"
                 loading="eager"
                 quality={"high"}
@@ -92,27 +93,31 @@ const { Content } = await render(post);
             </h1>
 
             <div id="article-meta" class="author-time" role="contentinfo">
-                <div class="author" role="group">
-                    <Image
-                        src={author?.data?.image}
-                        alt={`${author?.data?.name}`}
-                        height={36}
-                        width={36}
-                        loading="eager"
-                        quality={"high"}
-                        class="rounded-full"
-                        role="img"
-                    />
-                    <div>
-                        <h3>{author?.data?.name}</h3>
-                        <p
-                            class="position"
-                            aria-label={`${author?.data?.position}`}
-                        >
-                            {author?.data?.position}
-                        </p>
-                    </div>
-                </div>
+                {
+                    author && (
+                        <div class="author" role="group">
+                            <Image
+                                src={author.data.image}
+                                alt={author.data.name}
+                                height={36}
+                                width={36}
+                                loading="eager"
+                                quality={"high"}
+                                class="rounded-full"
+                                role="img"
+                            />
+                            <div>
+                                <h3>{author.data.name}</h3>
+                                <p
+                                    class="position"
+                                    aria-label={`${author.data.position}`}
+                                >
+                                    {author.data.position}
+                                </p>
+                            </div>
+                        </div>
+                    )
+                }
                 <time
                     class="date"
                     datetime={post.data.pubDate.toISOString()}
