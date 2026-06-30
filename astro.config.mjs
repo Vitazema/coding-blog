@@ -1,9 +1,11 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
+import { unified } from "@astrojs/markdown-remark";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import svelte from "@astrojs/svelte";
+import { remarkIgnoreMissingImages } from "./src/remark/remark-ignore-missing-images.js";
 
 import cloudflare from "@astrojs/cloudflare";
 
@@ -26,6 +28,11 @@ export default defineConfig({
         }),
         svelte(),
     ],
+    markdown: {
+        processor: unified({
+            remarkPlugins: [remarkIgnoreMissingImages],
+        }),
+    },
 
     vite: {
         plugins: [tailwindcss()],

@@ -7,9 +7,6 @@ $BlogRoot = "C:\Users\Zema\Code\coding-blog"
 $ObsidianPosts = Join-Path $ObsidianRoot "Posts"
 $BlogPosts = Join-Path $BlogRoot "src\content\blog"
 
-$ObsidianAssets = Join-Path $ObsidianRoot "Attachments\Posts"
-$BlogAssets = Join-Path $BlogRoot "src\content\blog\images"
-
 # Only these folders will be mirrored
 $Languages = @("en", "ru")
 
@@ -34,7 +31,9 @@ function Invoke-RobocopyMirror {
 
   robocopy $Source $Destination /MIR /XD ".obsidian" ".trash" ".git" /XF ".DS_Store" "Thumbs.db" "desktop.ini" "ehthumbs.db" "IconCache.db" | Out-Null
   
-  if ($LASTEXITCODE -ge 7) {
+  # Robocopy exit codes 0-7 are not fatal.
+  # 8+ means failure.
+  if ($LASTEXITCODE -ge 8) {
     Write-Error "Robocopy failed with exit code $LASTEXITCODE"
   }
 
@@ -48,22 +47,6 @@ foreach ($Language in $Languages) {
 
     Write-Host "Syncing language: $Language"
     Invoke-RobocopyMirror -Source $SourcePath -Destination $DestinationPath
-}
-
-if (Test-Path $ObsidianAssets) {
-    Write-Host "2. Syncing assets from Obsidian to Blog..."
-
-    foreach ($Language in $Languages) {
-        $SourcePath = Join-Path $ObsidianAssets $Language
-        $DestinationPath = Join-Path $BlogAssets $Language
-
-        if (Test-Path $SourcePath) {
-            Write-Host "Syncing assets for language: $Language"
-            Invoke-RobocopyMirror -Source $SourcePath -Destination $DestinationPath
-        }
-    }
-} else {
-    Write-Warning "2. Obsidian assets directory does not exist: $ObsidianAssets"
 }
 
 if ($BuildFromSrc) {
