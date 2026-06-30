@@ -5,14 +5,8 @@
  * English routes use original names (not included here)
  */
 export const routes: Record<string, Record<string, string>> = {
-    sl: {
-        about: "o-projektu",
-        blog: "spletni-dnevnik",
-        contact: "kontakt",
-        "dynamic-routing": "dinamicno-usmerjanje",
-        "blog-pagination": "spletni-dnevnik-paginacija",
-        pages: "strani",
-        "subpage-1": "podstran-1",
-        "subpage-2": "podstran-2",
-    },
-};
+  ru: {
+    // Keep Russian URLs equal to English route segments for now.
+    // Add localized values later when/if you want translated slugs.
+  },
+}

@@ -42,7 +42,7 @@ export const getStaticPaths = (async ({ paginate }) => {
             data: {
                 ...a.data,
                 position:
-                    a.data.position?.[code as "en" | "sl"] ??
+                    a.data.position?.[code as "en" | "ru"] ??
                     a.data.position?.en ??
                     "",
             },
@@ -50,7 +50,7 @@ export const getStaticPaths = (async ({ paginate }) => {
 
         const pages = paginate(filtered, {
             pageSize: PAGE_SIZE,
-            // Fixed segment before the catch-all ("blog-pagination" or "sl")
+            // Fixed segment before the catch-all ("blog-pagination" or "ru")
             params: { pagination },
             // Extra props for every page
             props: { lang: code, authors },

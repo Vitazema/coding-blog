@@ -37,7 +37,7 @@ export const getStaticPaths = (async () => {
                     data: {
                         ...author.data,
                         position:
-                            author.data.position?.[code as "en" | "sl"] ??
+                            author.data.position?.[code as "en" | "ru"] ??
                             author.data.position?.en ??
                             "",
                     },

@@ -5,17 +5,17 @@ import { buildLocalizedStaticPaths } from "@i18n/utils";
 import "@styles/markdown.css";
 
 // Get current language from URL
-// Localize the About page folder route.
-// Pattern: ["about", "...index"] → first segment fills [about], remaining (if any) fills [...index].
+// Localize the Apps page folder route.
+// Pattern: ["apps", "...index"] → first segment fills [apps], remaining (if any) fills [...index].
 export function getStaticPaths() {
-    return buildLocalizedStaticPaths("/about", ["about", "...index"]);
+    return buildLocalizedStaticPaths("/apps", ["apps", "...index"]);
 }
 
 // Props
 const { lang } = Astro.props;
 
 // Dynamically import the correct MDX file based on the language
-const { Content, frontmatter } = await import(`./_about-${lang}.mdx`);
+const { Content, frontmatter } = await import(`./_apps-${lang}.mdx`);
 ---
 
 <Base

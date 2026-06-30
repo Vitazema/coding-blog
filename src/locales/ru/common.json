@@ -1,0 +1,35 @@
+{
+    "menu": {
+        "list": {
+            "home": "Главная",
+            "apps": "Приложения",
+            "pages": "Страницы",
+            "blog": "Блог",
+            "pagination": "Пагинация",
+            "contact": "Обо мне"
+        },
+        "languagesText": {
+            "selectLanguage": "Выберите язык"
+        },
+        "languages": {
+            "en": "Английский",
+            "ru": "Русский"
+        }
+    },
+    "footer": {
+        "description": ".NET блог разработчика",
+        "name": "Vitalii Zema",
+        "copy": "Авторские права",
+        "made": "Сделано с {{what}}",
+        "index": "Оглавление",
+        "backToHome": "Вернуться на главную"
+    },
+    "pageNotFound": {
+        "head": {
+            "title": "404",
+            "description": "Страница не найдена"
+        },
+        "title": "404. Страница не найдена ¯\\_(ツ)_/¯",
+        "link": "Вернуться на главную"
+    }
+}

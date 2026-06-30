@@ -11,7 +11,7 @@ const localeModules = import.meta.glob("/src/locales/**/*.json", {
  */
 export const languages = {
     en: "English",
-    sl: "Slovenian",
+    ru: "Russian",
 };
 
 /**
@@ -44,7 +44,7 @@ export const ui = Object.entries(localeModules).reduce(
         acc[lang][namespace] = translations;
         return acc;
     },
-    {} as Record<string, Record<string, Record<string, string>>>
+    {} as Record<string, Record<string, Record<string, string>>>,
 );
 
 /**

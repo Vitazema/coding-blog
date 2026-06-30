@@ -1,4 +1,10 @@
-import { ui, languages, defaultLang, showDefaultLang, type TranslationKey } from "./ui";
+import {
+    ui,
+    languages,
+    defaultLang,
+    showDefaultLang,
+    type TranslationKey,
+} from "./ui";
 import { routes } from "./routes";
 import { getCollection } from "astro:content";
 
@@ -21,7 +27,7 @@ export function getLangFromUrl(url: URL) {
 export function useTranslations(lang: keyof typeof ui) {
     return function t(
         key: TranslationKey,
-        params?: Record<string, string | number>
+        params?: Record<string, string | number>,
     ) {
         let namespace: string;
         let translationKey: string;
@@ -105,7 +111,7 @@ export function useTranslatedPath(lang: keyof typeof ui) {
 export function buildLocalizedStaticPaths(
     basePath: string,
     pattern: string[],
-    extraProps?: (lang: string) => Record<string, any>
+    extraProps?: (lang: string) => Record<string, any>,
 ) {
     const langs = Object.keys(languages);
     return langs.map((code) => {
@@ -145,7 +151,7 @@ export function buildLocalizedStaticPaths(
  */
 export async function switchLanguageUrl(
     currentUrl: URL,
-    targetLang: string
+    targetLang: string,
 ): Promise<string> {
     const pathname = currentUrl.pathname;
     const pathParts = pathname.split("/").filter((p) => p);
@@ -173,7 +179,7 @@ export async function switchLanguageUrl(
             targetLang,
             baseRoute,
             slug,
-            currentUrl.pathname
+            currentUrl.pathname,
         );
     }
 
@@ -183,7 +189,8 @@ export async function switchLanguageUrl(
     });
 
     const newPath = translatedSegments.join("/");
-    const prefix = !showDefaultLang && targetLang === defaultLang ? "" : `/${targetLang}`;
+    const prefix =
+        !showDefaultLang && targetLang === defaultLang ? "" : `/${targetLang}`;
     return `${prefix}/${newPath}`;
 }
 
@@ -193,12 +200,12 @@ export async function switchLanguageUrl(
  */
 function interpolateParams(
     text: string,
-    params: Record<string, string | number>
+    params: Record<string, string | number>,
 ): string {
     return Object.entries(params).reduce(
         (result, [key, value]) =>
             result.replace(new RegExp(`{{${key}}}`, "g"), String(value)),
-        text
+        text,
     );
 }
 
@@ -211,7 +218,7 @@ export async function buildContentLinks(): Promise<
 > {
     const allPosts = await getCollection(
         "blog",
-        (entry) => !entry.data.isDraft
+        (entry) => !entry.data.isDraft,
     );
     const links: Record<string, Record<string, string>> = {};
 
@@ -237,7 +244,7 @@ async function findContentGroup(collectionId: string): Promise<string | null> {
     const dynamicLinks = await buildContentLinks();
     return (
         Object.entries(dynamicLinks).find(([, links]) =>
-            Object.values(links).includes(collectionId)
+            Object.values(links).includes(collectionId),
         )?.[0] || null
     );
 }
@@ -246,7 +253,7 @@ async function findContentGroup(collectionId: string): Promise<string | null> {
  * Checks if route is a blog route in any language
  */
 function isBlogRoute(route: string): boolean {
-    return route === "blog" || route === "spletni-dnevnik";
+    return getOriginalRouteName(route) === "blog";
 }
 
 /**
@@ -267,9 +274,10 @@ async function handleBlogPostTranslation(
     targetLang: string,
     baseRoute: string,
     slug: string,
-    fallbackPath: string
+    fallbackPath: string,
 ): Promise<string> {
-    const currentPostId = `${getLangCode(currentLang)}/${slug}`;
+    const decodedSlug = decodeURIComponent(slug);
+    const currentPostId = `${getLangCode(currentLang)}/${decodedSlug}`;
     const contentGroup = await findContentGroup(currentPostId);
 
     if (contentGroup) {
@@ -280,7 +288,7 @@ async function handleBlogPostTranslation(
         if (targetPostId) {
             const targetSlug = targetPostId.split("/")[1];
             const targetRouteName = translateRouteName(baseRoute, targetLang);
-            const targetPath = `/${targetRouteName}/${targetSlug}`;
+            const targetPath = `/${targetRouteName}/${encodeURIComponent(targetSlug)}`;
 
             const prefix =
                 !showDefaultLang && targetLang === defaultLang
@@ -290,7 +298,11 @@ async function handleBlogPostTranslation(
         }
     }
 
-    return fallbackPath;
+    const translatedFallbackRoute = translateRouteName(baseRoute, targetLang);
+    const translatedFallbackPath = `/${translatedFallbackRoute}/${slug}`;
+    const prefix =
+        !showDefaultLang && targetLang === defaultLang ? "" : `/${targetLang}`;
+    return `${prefix}${translatedFallbackPath}`;
 }
 
 /**
@@ -300,7 +312,7 @@ async function handleBlogPostTranslation(
 function getOriginalRouteName(routeName: string): string {
     for (const routeMap of Object.values(routes)) {
         const original = Object.entries(routeMap).find(
-            ([, translated]) => translated === routeName
+            ([, translated]) => translated === routeName,
         )?.[0];
         if (original) return original;
     }

@@ -18,7 +18,7 @@ export function getStaticPaths() {
 // it would work like [blog]/[...index.astro] with these route configurations:
 //
 // English:   { params: { blog: "blog", index: undefined }, props: { lang: "en" } } → /blog
-// Slovenian: { params: { blog: "sl", index: "strani" }, props: { lang: "sl" } } → /sl/spletni-dnevnik
+// Slovenian: { params: { blog: "ru", index: "strani" }, props: { lang: "ru" } } → /sl/spletni-dnevnik
 
 // Props
 const { lang } = Astro.props;
@@ -46,7 +46,7 @@ const authors = authorsRaw.map((a) => ({
     data: {
         ...a.data,
         position:
-            a.data.position?.[lang as "en" | "sl"] ??
+            a.data.position?.[lang as "en" | "ru"] ??
             a.data.position?.en ??
             "",
     },

@@ -1,17 +1,17 @@
 {
-    "name": "astro-i18n-starter",
+    "name": "personal-developers-blog",
     "private": true,
     "version": "1.2.1",
     "type": "module",
     "description": "Multilingual Astro starter with URL localization and i18n support",
     "author": {
-        "name": "Nik Klemenc",
-        "url": "https://klemenc.si"
+        "name": "Vitalii Zema",
+        "url": "https://vitazema.dev"
     },
-    "homepage": "https://klemenc.si",
+    "homepage": "https://vitazema.dev",
     "repository": {
         "type": "git",
-        "url": "https://github.com/Scorpio3310/astro-i18n-starter"
+        "url": "https://github.com/vitazema"
     },
     "license": "MIT",
     "keywords": [

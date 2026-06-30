@@ -13,11 +13,11 @@ Ker Astro privzeto še ne podpira lokalizacije URL-jev, je bil potreben drugače
 
 Projekt implementira sistem internacionalizacije (i18n), ki omogoča:
 
--   ✅ SEO-prijazne URL-je v več jezikih
--   ✅ Avtomatsko statično generiranje ob času gradnje
--   ✅ Jezikovno specifično nalaganje vsebine
--   ✅ Dosledno integracijo s sistemom prevodov
--   ✅ Pametno preklapljanje jezikov z ohranjanjem konteksta
+- ✅ SEO-prijazne URL-je v več jezikih
+- ✅ Avtomatsko statično generiranje ob času gradnje
+- ✅ Jezikovno specifično nalaganje vsebine
+- ✅ Dosledno integracijo s sistemom prevodov
+- ✅ Pametno preklapljanje jezikov z ohranjanjem konteksta
 
 ## 📁 Struktura datotek
 
@@ -101,22 +101,22 @@ Obstajata dva glavna vzorca za implementacijo dinamičnih strani:
 #### Vzorec A: `[...pages].astro`
 
 ```ts
-import { buildLocalizedStaticPaths } from "@i18n/utils";
+import { buildLocalizedStaticPaths } from "@i18n/utils"
 
 // Enotna datoteka: [...pages].astro
 export function getStaticPaths() {
-    return buildLocalizedStaticPaths("/pages", ["...pages"]);
+  return buildLocalizedStaticPaths("/pages", ["...pages"])
 }
 ```
 
 #### Vzorec B: `[pages]/[...index].astro`
 
 ```ts
-import { buildLocalizedStaticPaths } from "@i18n/utils";
+import { buildLocalizedStaticPaths } from "@i18n/utils"
 
 // Vzorec mape: [pages]/[...index].astro
 export function getStaticPaths() {
-    return buildLocalizedStaticPaths("/pages", ["pages", "...index"]);
+  return buildLocalizedStaticPaths("/pages", ["pages", "...index"])
 }
 ```
 
@@ -128,14 +128,14 @@ Ta datoteka definira preslikave med angleškimi in lokaliziranimi potmi:
 
 ```typescript
 export const routes: Record<string, Record<string, string>> = {
-    sl: {
-        about: "o-projektu",
-        blog: "spletni-dnevnik",
-        services: "storitve",
-        pages: "strani",
-        contact: "stik",
-    },
-};
+  sl: {
+    about: "o-projektu",
+    blog: "spletni-dnevnik",
+    services: "storitve",
+    pages: "strani",
+    contact: "stik",
+  },
+}
 ```
 
 > **Pomembno**: Ključi se morajo ujemati s parametri v `getStaticPaths()` funkcijah!
@@ -144,20 +144,20 @@ export const routes: Record<string, Record<string, string>> = {
 
 Ta datoteka vsebuje ključne konfiguracije za jezikovno podporo:
 
--   **`languages`** - definira podprte jezike in njihove oznake; tukaj dodaš nove jezike
--   **`defaultLang`** - določa privzeti jezik aplikacije; sprememba premakne koren (`/`) na izbrani jezik
--   **`showDefaultLang`** - določa, ali se privzeti jezik prikaže v URL-jih (`/en/...` namesto `/`)
+- **`languages`** - definira podprte jezike in njihove oznake; tukaj dodaš nove jezike
+- **`defaultLang`** - določa privzeti jezik aplikacije; sprememba premakne koren (`/`) na izbrani jezik
+- **`showDefaultLang`** - določa, ali se privzeti jezik prikaže v URL-jih (`/en/...` namesto `/`)
 
 Obe nastavitvi sta podprti na straneh, blogu in paginaciji.
 
 ```typescript
 export const languages = {
-    en: "English",
-    sl: "Slovenian",
-};
+  en: "English",
+  sl: "Slovenian",
+}
 
-export const defaultLang = "en"; // npr. "sl" za slovenski koren
-export const showDefaultLang = false; // true → vedno s predpono: /en/..., /sl/...
+export const defaultLang = "en" // npr. "sl" za slovenski koren
+export const showDefaultLang = false // true → vedno s predpono: /en/..., /sl/...
 ```
 
 #### Kako preklopiti privzeti jezik
@@ -178,7 +178,7 @@ export const showDefaultLang = false; // true → vedno s predpono: /en/..., /sl
 Pridobiva trenutni jezik iz URL-ja:
 
 ```typescript
-const lang = getLangFromUrl(Astro.url); // "sl" ali "en"
+const lang = getLangFromUrl(Astro.url) // "sl" ali "en"
 ```
 
 #### `useTranslations(lang: string)`
@@ -186,16 +186,16 @@ const lang = getLangFromUrl(Astro.url); // "sl" ali "en"
 Vrača funkcijo za prevajanje besedil:
 
 ```typescript
-const t = useTranslations(lang);
-const title = t("main:head.title");
-const navHome = t("menu.list.home"); // Uporablja "common" imenski prostor
+const t = useTranslations(lang)
+const title = t("main:head.title")
+const navHome = t("menu.list.home") // Uporablja "common" imenski prostor
 ```
 
 **Podprt format ključev**:
 
--   `"namespace:key"` → `t("main:title")`
--   Neposredni ključi → `t("menu.home")` (privzeto "common" imenski prostor)
--   Parametri → `t("footer.made", { what: "Astro" })`
+- `"namespace:key"` → `t("main:title")`
+- Neposredni ključi → `t("menu.home")` (privzeto "common" imenski prostor)
+- Parametri → `t("footer.made", { what: "Astro" })`
 
 #### `useTranslatedPath(lang: string)`
 
@@ -211,7 +211,7 @@ const translatePath = useTranslatedPath(lang);
 Omogoča preklapljanje jezikov ob ohranjanju konteksta trenutne strani:
 
 ```typescript
-const newUrl = await switchLanguageUrl(Astro.url, "sl");
+const newUrl = await switchLanguageUrl(Astro.url, "sl")
 ```
 
 ## 🧩 Helper: buildLocalizedStaticPaths()
@@ -224,8 +224,11 @@ Podpis:
 function buildLocalizedStaticPaths(
   basePath: string,
   pattern: string[],
-  extraProps?: (lang: string) => Record<string, any>
-): Array<{ params: Record<string, string | undefined>; props: Record<string, any> }>
+  extraProps?: (lang: string) => Record<string, any>,
+): Array<{
+  params: Record<string, string | undefined>
+  props: Record<string, any>
+}>
 ```
 
 Pravila vzorca:
@@ -240,32 +243,46 @@ Primeri:
 ```ts
 // O nas mapa: [about]/[...index].astro
 export function getStaticPaths() {
-  return buildLocalizedStaticPaths("/about", ["about", "...index"]);
+  return buildLocalizedStaticPaths("/about", ["about", "...index"])
 }
 
 // Dinamično usmerjanje root: [dyn_routing]/[...index].astro
 export function getStaticPaths() {
-  return buildLocalizedStaticPaths("/dynamic-routing", ["dyn_routing", "...index"]);
+  return buildLocalizedStaticPaths("/dynamic-routing", [
+    "dyn_routing",
+    "...index",
+  ])
 }
 
 // Dinamično usmerjanje podstran 1: [dyn_routing]/[...subpage1].astro
 export function getStaticPaths() {
-  return buildLocalizedStaticPaths("/dynamic-routing/subpage-1", ["dyn_routing", "...subpage1"]);
+  return buildLocalizedStaticPaths("/dynamic-routing/subpage-1", [
+    "dyn_routing",
+    "...subpage1",
+  ])
 }
 
 // Dinamično usmerjanje podstran 2 (gnezdeno): [dyn_routing]/[subpage2]/[...index].astro
 export function getStaticPaths() {
-  return buildLocalizedStaticPaths("/dynamic-routing/subpage-2", ["dyn_routing", "subpage2", "...index"]);
+  return buildLocalizedStaticPaths("/dynamic-routing/subpage-2", [
+    "dyn_routing",
+    "subpage2",
+    "...index",
+  ])
 }
 
 // Blog seznam: [...blog].astro
 export function getStaticPaths() {
-  return buildLocalizedStaticPaths("/blog", ["...blog"]);
+  return buildLocalizedStaticPaths("/blog", ["...blog"])
 }
 
 // Opcijsko: dodatni props per jezik
 export function getStaticPaths() {
-  return buildLocalizedStaticPaths("/services", ["services", "...index"], (lang) => ({ section: "services", lang }));
+  return buildLocalizedStaticPaths(
+    "/services",
+    ["services", "...index"],
+    (lang) => ({ section: "services", lang }),
+  )
 }
 ```
 
@@ -275,22 +292,22 @@ Opomba (paginacija): paginacijska pot uporabi ta helper za lokalizacijo osnovneg
 
 ```typescript
 const navigationData = [
-    {
-        label: "menu.list.home", // Ključ za prevod
-        href: "/", // Angleška pot (privzeta)
-        children: [],
-    },
-    {
-        label: "menu.list.service",
-        href: "/services",
-        children: [
-            {
-                label: "menu.list.subpage-1",
-                href: "/services/service-1",
-            },
-        ],
-    },
-];
+  {
+    label: "menu.list.home", // Ključ za prevod
+    href: "/", // Angleška pot (privzeta)
+    children: [],
+  },
+  {
+    label: "menu.list.service",
+    href: "/services",
+    children: [
+      {
+        label: "menu.list.subpage-1",
+        href: "/services/service-1",
+      },
+    ],
+  },
+]
 ```
 
 > **Opomba**: URL-ji v navigaciji so vedno v angleščini, ker se avtomatsko lokalizirajo preko `translatePath()`.
@@ -317,16 +334,16 @@ src/locales/
 
 ```json
 {
-    "menu": {
-        "list": {
-            "home": "Domov",
-            "about": "O nas",
-            "blog": "Blog"
-        }
-    },
-    "footer": {
-        "made": "Narejeno z {{what}}"
+  "menu": {
+    "list": {
+      "home": "Domov",
+      "about": "O nas",
+      "blog": "Blog"
     }
+  },
+  "footer": {
+    "made": "Narejeno z {{what}}"
+  }
 }
 ```
 
@@ -379,14 +396,14 @@ Sistem omogoča povezovanje avtorjev z blog objavami. V tem primeru je uporablje
 
 ```json
 {
-    "nik-klemenc": {
-        "name": "Nik Klemenc",
-        "image": "./nik.jpg",
-        "position": {
-            "en": "Full-stack Developer",
-            "sl": "Full-stack razvijalec"
-        }
+  "nik-klemenc": {
+    "name": "Nik Klemenc",
+    "image": "./nik.jpg",
+    "position": {
+      "en": "Full-stack Developer",
+      "sl": "Full-stack razvijalec"
     }
+  }
 }
 ```
 
@@ -397,19 +414,19 @@ Projekt vključuje primer paginacije v `[pagination]/[...page].astro`, implement
 ```ts
 // Paginacija z Astro funkcijo paginate()
 export const getStaticPaths = async ({ paginate }) => {
-    const posts = /* pridobi in uredi objave po jeziku */ [];
-    return paginate(posts, {
-        pageSize: 4,
-        params: { pagination: "blog-pagination" },
-        props: {
-            /* lang, authors, totals */
-        },
-    });
-};
+  const posts = /* pridobi in uredi objave po jeziku */ []
+  return paginate(posts, {
+    pageSize: 4,
+    params: { pagination: "blog-pagination" },
+    props: {
+      /* lang, authors, totals */
+    },
+  })
+}
 ```
 
--   URL-ji: EN `/blog-pagination`, `/blog-pagination/2`; SL `/sl/spletni-dnevnik-paginacija`, `/sl/spletni-dnevnik-paginacija/2`.
--   Predloga uporablja `page.data`, `page.currentPage` in `page.lastPage`.
+- URL-ji: EN `/blog-pagination`, `/blog-pagination/2`; SL `/sl/spletni-dnevnik-paginacija`, `/sl/spletni-dnevnik-paginacija/2`.
+- Predloga uporablja `page.data`, `page.currentPage` in `page.lastPage`.
 
 ## 💻 Primeri uporabe
 
@@ -490,33 +507,34 @@ const translatePath = useTranslatedPath(lang);
 
 ### 1. Poimenovanje datotek
 
--   Uporabljajte angleška imena za datoteke v `pages/` mapi
--   Lokalizirajte samo URL-je preko `routes.ts`
--   Primeri: `[about]` mapa, ne `[o-projektu]`
+- Uporabljajte angleška imena za datoteke v `pages/` mapi
+- Lokalizirajte samo URL-je preko `routes.ts`
+- Primeri: `[about]` mapa, ne `[o-projektu]`
 
 ### 2. Prevodni ključi
 
--   Uporabljajte hierarhično strukturo (`menu.list.home`)
--   Ločite po imenskih prostorih (`main:title`, `about:description`)
--   Dodajte kontekst v imena ključev
+- Uporabljajte hierarhično strukturo (`menu.list.home`)
+- Ločite po imenskih prostorih (`main:title`, `about:description`)
+- Dodajte kontekst v imena ključev
 
 ### 3. Povezovanje vsebin
 
--   Vedno dodajte `linkedContent` identifikator v blog objave
--   Uporabljajte dosledno poimenovanje med jeziki
--   Testirajte preklapljanje jezikov na vseh straneh
+- Vedno dodajte `linkedContent` identifikator v blog objave
+- Uporabljajte dosledno poimenovanje med jeziki
+- Testirajte preklapljanje jezikov na vseh straneh
 
 ### 4. SEO optimizacija
 
--   Dodajte `title` in `description` meta podatke
--   Uporabljajte `hreflang` atribute za večjezične strani
--   Implementirajte strukturirane podatke
+- Dodajte `title` in `description` meta podatke
+- Uporabljajte `hreflang` atribute za večjezične strani
+- Implementirajte strukturirane podatke
 
 ## ❓ Pogosta vprašanja
 
 **Zakaj ne uporabite privzetega Astro i18n?**
 
 Astro nima vseh funkcionalnosti za popolnoma lokalizirane segmente URL-jev s povezovanjem vsebine (linked slugi) in natančnim vedenjem predpone (defaultLang/showDefaultLang). Ta projekt uporablja tanek i18n sloj (`routes.ts`, `useTranslatedPath`, `switchLanguageUrl`), ki zagotavlja:
+
 - Prevedene segmente poti (npr. `/about` → `/o-projektu`)
 - Neobvezno predpono za privzeti jezik
 - Preklop jezika z ohranjanjem konteksta, vključno z blog slugi prek `linkedContent`
