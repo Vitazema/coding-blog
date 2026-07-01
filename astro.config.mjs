@@ -1,13 +1,12 @@
 // @ts-check
 import { defineConfig } from "astro/config";
+import node from "@astrojs/node";
 import mdx from "@astrojs/mdx";
 import { unified } from "@astrojs/markdown-remark";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import svelte from "@astrojs/svelte";
 import { remarkIgnoreMissingImages } from "./src/remark/remark-ignore-missing-images.js";
-
-import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
@@ -38,5 +37,7 @@ export default defineConfig({
         plugins: [tailwindcss()],
     },
 
-    adapter: cloudflare(),
+    adapter: node({
+        mode: "standalone",
+    }),
 });
